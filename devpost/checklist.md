@@ -14,8 +14,10 @@ status: approved
 - [x] 本地服务检查：python3 http.server 能提供页面，node --check app.js 通过
 - [x] 演示模式 `?demo=1`：真实应用内自动演示添加、暂停、筛选
 
-## 待验证（录屏与仓库步骤中做）
-- [ ] 虚拟显示 + Chromium + ffmpeg 录 1–3 分钟真实演示视频，检查时长与画面
-- [ ] GitHub 公开仓库创建并实测推送，仓库包含 scope.md、prd.md、spec.md、README.md 与许可证
+## 已完成（续）
+- [x] 虚拟显示 + Chromium + ffmpeg 录 75 秒真实演示视频，抽帧验证合计与排序
+- [x] GitHub 公开仓库 https://github.com/simonlin1212/subtrack 已创建并实测推送，仓库包含 scope.md、prd.md、spec.md、README.md 与许可证
+
+## 待验证
 - [ ] 演示视频上传到 YouTube，拿到公开链接
 - [ ] Devpost 提交（须学习者本人确认最终视频与仓库后才提交）
