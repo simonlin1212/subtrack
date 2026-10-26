@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SubTrack — 订阅管理助手</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>SubTrack <span class="subtitle">订阅管理助手</span></h1>
+  <p class="tagline">一眼看到每个月花了多少、下一个什么时候续费。</p>
+  <p id="demoBadge" class="demo-badge" hidden>演示模式：正在自动演示添加、暂停等操作</p>
+</header>
+
+<section id="summary" aria-label="汇总">
+  <div class="card"><div class="label">月度等效合计</div><div id="monthlyTotal" class="total">—</div></div>
+  <div class="card"><div class="label">年度等效合计</div><div id="yearlyTotal" class="total">—</div></div>
+  <div class="card"><div class="label">启用中</div><div id="activeCount" class="total">—</div></div>
+  <div class="card"><div class="label">30 天内到期</div><div id="dueCount" class="total">—</div></div>
+</section>
+
+<section aria-label="添加订阅">
+  <h2 id="formTitle">添加订阅</h2>
+  <form id="subForm">
+    <label>名称 * <input id="fName" required placeholder="例如：视频会员"></label>
+    <label>金额 * <input id="fAmount" type="number" min="0.01" step="0.01" required placeholder="例如：25"></label>
+    <label>币种 <input id="fCurrency" value="CNY"></label>
+    <label>计费周期
+      <select id="fCycle"><option value="monthly">按月</option><option value="yearly">按年</option></select>
+    </label>
+    <label>下次续费日期 * <input id="fDate" type="date" required></label>
+    <label>分类
+      <select id="fCategory">
+        <option>视频</option><option>音乐</option><option>工具</option><option>云服务</option><option>其他</option>
+      </select>
+    </label>
+    <label>备注 <input id="fNotes" placeholder="可选"></label>
+    <p id="formError" class="error" hidden></p>
+    <button type="submit" id="submitBtn">保存订阅</button>
+    <button type="button" id="cancelEditBtn" hidden>取消编辑</button>
+  </form>
+</section>
+
+<section aria-label="筛选">
+  <div class="filters">
+    <button class="filterBtn active" data-filter="all">全部</button>
+    <button class="filterBtn" data-filter="active">启用中</button>
+    <button class="filterBtn" data-filter="paused">已暂停</button>
+  </div>
+</section>
+
+<section aria-label="订阅列表">
+  <h2>订阅列表 <span class="hint">按续费从近到远排序，逾期在最前</span></h2>
+  <div id="emptyState" class="empty" hidden>
+    <p>还没有订阅。先添加一个，或者加载示例数据看看效果。</p>
+    <button id="loadSampleBtn2">加载示例数据</button>
+  </div>
+  <ul id="subList"></ul>
+  <p id="listError" class="error" hidden></p>
+</section>
+
+<footer>
+  <button id="loadSampleBtn">加载示例数据</button>
+  <button id="clearSampleBtn" hidden>清除示例数据</button>
+  <p>数据只存在本浏览器里，不会传到任何服务器。SubTrack 不会扣费、支付或取消任何真实订阅。</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
