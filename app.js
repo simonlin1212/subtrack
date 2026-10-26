@@ -51,9 +51,9 @@ function urgency(s) {
 }
 function daysLabel(s) {
   const d = daysUntil(s.nextRenewal);
-  if (d < 0) return '逾期 ' + (-d) + ' 天';
-  if (d === 0) return '今天到期';
-  return d + ' 天后到期';
+  if (d < 0) return 'Overdue by ' + (-d) + ' days';
+  if (d === 0) return 'Due today';
+  return 'Due in ' + d + ' days';
 }
 function render() {
   const active = subs.filter(s => !s.paused);
@@ -76,13 +76,13 @@ function render() {
     li.className = 'sub-row ' + (u === 'overdue' ? 'overdue' : u === 'soon' ? 'soon' : u === 'paused' ? 'paused' : '');
     const daysCls = u === 'overdue' ? 'overdue' : u === 'soon' ? 'soon' : '';
     li.innerHTML =
-      '<div><div class="sub-name">' + escapeHtml(s.name) + ' <span class="sub-meta">· ' + escapeHtml(s.category) + (s.paused ? ' · 已暂停' : '') + '</span></div>' +
-      '<div class="sub-meta">' + escapeHtml(s.currency) + ' ' + Number(s.amount).toFixed(2) + ' / ' + (s.cycle === 'yearly' ? '年' : '月') + ' · 下次续费 ' + escapeHtml(s.nextRenewal) + (s.notes ? ' · ' + escapeHtml(s.notes) : '') + '</div></div>' +
+      '<div><div class="sub-name">' + escapeHtml(s.name) + ' <span class="sub-meta">· ' + escapeHtml(s.category) + (s.paused ? ' · Paused' : '') + '</span></div>' +
+      '<div class="sub-meta">' + escapeHtml(s.currency) + ' ' + Number(s.amount).toFixed(2) + ' / ' + (s.cycle === 'yearly' ? 'year' : 'month') + ' · Next renewal ' + escapeHtml(s.nextRenewal) + (s.notes ? ' · ' + escapeHtml(s.notes) : '') + '</div></div>' +
       '<div><span class="sub-days ' + daysCls + '">' + daysLabel(s) + '</span>' +
       '<span class="row-actions">' +
-      '<button data-act="edit" data-id="' + s.id + '">编辑</button>' +
-      '<button data-act="pause" data-id="' + s.id + '">' + (s.paused ? '恢复' : '暂停') + '</button>' +
-      '<button data-act="delete" data-id="' + s.id + '" class="danger">' + (pendingDeleteId === s.id ? '确认删除？' : '删除') + '</button>' +
+      '<button data-act="edit" data-id="' + s.id + '">Edit</button>' +
+      '<button data-act="pause" data-id="' + s.id + '">' + (s.paused ? 'Resume' : 'Pause') + '</button>' +
+      '<button data-act="delete" data-id="' + s.id + '" class="danger">' + (pendingDeleteId === s.id ? 'Confirm delete?' : 'Delete') + '</button>' +
       '</span></div>';
     listEl.appendChild(li);
   });
@@ -101,7 +101,7 @@ document.getElementById('subForm').addEventListener('submit', e => {
   const category = document.getElementById('fCategory').value;
   const notes = document.getElementById('fNotes').value.trim();
   if (!name || !(amount > 0) || !date) {
-    errEl.textContent = '请检查：名称不能为空，金额要大于 0，续费日期不能为空。';
+    errEl.textContent = 'Please check: name must not be empty, amount must be greater than 0, and renewal date must not be empty.';
     errEl.hidden = false; return;
   }
   errEl.hidden = true;
@@ -109,9 +109,9 @@ document.getElementById('subForm').addEventListener('submit', e => {
     const s = subs.find(x => x.id === editingId);
     if (s) Object.assign(s, { name, amount, currency, cycle, nextRenewal: date, category, notes });
     editingId = null;
-    document.getElementById('formTitle').textContent = '添加订阅';
+    document.getElementById('formTitle').textContent = 'Add subscription';
     document.getElementById('cancelEditBtn').hidden = true;
-    document.getElementById('submitBtn').textContent = '保存订阅';
+    document.getElementById('submitBtn').textContent = 'Save subscription';
   } else {
     subs.push({ id: Date.now() + '-' + Math.random().toString(36).slice(2), name, amount, currency, cycle, nextRenewal: date, category, notes, paused: false, isSample: false });
   }
@@ -121,9 +121,9 @@ document.getElementById('subForm').addEventListener('submit', e => {
 document.getElementById('cancelEditBtn').addEventListener('click', () => {
   editingId = null;
   document.getElementById('subForm').reset(); document.getElementById('fCurrency').value = 'CNY';
-  document.getElementById('formTitle').textContent = '添加订阅';
+  document.getElementById('formTitle').textContent = 'Add subscription';
   document.getElementById('cancelEditBtn').hidden = true;
-  document.getElementById('submitBtn').textContent = '保存订阅';
+  document.getElementById('submitBtn').textContent = 'Save subscription';
 });
 document.getElementById('subList').addEventListener('click', e => {
   const btn = e.target.closest('button'); if (!btn) return;
@@ -138,9 +138,9 @@ document.getElementById('subList').addEventListener('click', e => {
     document.getElementById('fDate').value = s.nextRenewal;
     document.getElementById('fCategory').value = s.category;
     document.getElementById('fNotes').value = s.notes || '';
-    document.getElementById('formTitle').textContent = '编辑订阅';
+    document.getElementById('formTitle').textContent = 'Edit subscription';
     document.getElementById('cancelEditBtn').hidden = false;
-    document.getElementById('submitBtn').textContent = '保存修改';
+    document.getElementById('submitBtn').textContent = 'Save changes';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (act === 'pause') {
     s.paused = !s.paused; save(); render();
@@ -160,9 +160,9 @@ function loadSamples() {
   const t = todayLocal();
   const plus = n => { const d = new Date(t); d.setDate(d.getDate() + n); return fmtDate(d); };
   subs = [
-    { id: 'sample-1', name: '视频会员', amount: 25, currency: 'CNY', cycle: 'monthly', nextRenewal: plus(-5), category: '视频', notes: '示例数据', paused: false, isSample: true },
-    { id: 'sample-2', name: '音乐会员', amount: 15, currency: 'CNY', cycle: 'monthly', nextRenewal: plus(3), category: '音乐', notes: '示例数据', paused: false, isSample: true },
-    { id: 'sample-3', name: '开发工具', amount: 120, currency: 'CNY', cycle: 'yearly', nextRenewal: plus(21), category: '工具', notes: '示例数据', paused: false, isSample: true },
+    { id: 'sample-1', name: 'Streaming', amount: 25, currency: 'CNY', cycle: 'monthly', nextRenewal: plus(-5), category: 'Streaming', notes: 'Sample data', paused: false, isSample: true },
+    { id: 'sample-2', name: 'Music', amount: 15, currency: 'CNY', cycle: 'monthly', nextRenewal: plus(3), category: 'Music', notes: 'Sample data', paused: false, isSample: true },
+    { id: 'sample-3', name: 'Developer tool', amount: 120, currency: 'CNY', cycle: 'yearly', nextRenewal: plus(21), category: 'Tools', notes: 'Sample data', paused: false, isSample: true },
   ];
   save(); render();
 }
@@ -179,7 +179,7 @@ async function runDemo() {
   await sleep(8000);
   loadSamples(); await sleep(15000);
   // Add one real subscription through the same code path as the form.
-  subs.push({ id: 'demo-1', name: '云盘会员', amount: 30, currency: 'CNY', cycle: 'monthly', nextRenewal: fmtDate(new Date(Date.now() + 6 * 86400000)), category: '云服务', notes: '演示添加', paused: false, isSample: false });
+  subs.push({ id: 'demo-1', name: 'Cloud storage', amount: 30, currency: 'CNY', cycle: 'monthly', nextRenewal: fmtDate(new Date(Date.now() + 6 * 86400000)), category: 'Cloud', notes: 'Demo add', paused: false, isSample: false });
   save(); render(); await sleep(15000);
   const first = subs.find(s => s.id === 'sample-2');
   if (first) { first.paused = true; save(); render(); }

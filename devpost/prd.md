@@ -3,94 +3,94 @@ doc: prd
 status: approved
 ---
 
-# SubTrack — 产品需求
+# SubTrack — Product Requirements
 
-一句话：一个单页订阅管理助手，给订阅很多的人一眼看到续费顺序和月度合计。
-来源：`scope.md > 独特核心`、`scope.md > 核心循环`、`scope.md > 概念验证边界`。
+One line: a single-page subscription management assistant that lets people with many subscriptions see renewal order and monthly totals at a glance.
+Sources: `scope.md > Unique core`, `scope.md > Core loop`, `scope.md > Proof-of-concept boundary`.
 
-## 核心旅程
-1. 打开应用。如果还没有数据，看到空状态和两个明确动作：添加订阅，或加载示例数据。
-2. 添加订阅：输入名称、金额、币种、计费周期（按月或按年）、下次续费日期、分类和可选备注，保存。
-3. 订阅出现在列表里，按距离续费天数排序，月度等效合计立刻更新。
-4. 顶部汇总一眼看到：月度等效合计、年度等效合计、启用中数量、未来 30 天内到期数量。
-5. 用筛选（全部 / 启用中 / 已暂停）缩小列表；编辑订阅改金额或续费日期，暂停暂时不用的，删除已取消的。
-6. 刷新页面，数据还在——存在浏览器里。
-7. 成功的样子：加一个订阅，顺序、高亮和合计一步同时变化，演示一分钟内就能讲清楚。
+## Core journey
+1. Open the app. If there is no data yet, see an empty state with two clear actions: add a subscription, or load sample data.
+2. Add a subscription: enter name, amount, currency, billing cycle (monthly or yearly), next renewal date, category and optional notes, then save.
+3. The subscription appears in the list, sorted by days until renewal, and the monthly-equivalent total updates immediately.
+4. The summary strip at the top shows at a glance: monthly-equivalent total, yearly-equivalent total, active count, and count due within 30 days.
+5. Narrow the list with the filter (All / Active / Paused); edit a subscription to change amount or renewal date, pause one that is temporarily unused, delete one that was cancelled.
+6. Refresh the page and the data is still there — it is stored in the browser.
+7. Success looks like: adding a subscription visibly changes order, highlighting and totals in one step, so the demo can be explained in under a minute.
 
-## 界面与布局
-只有一个页面，没有页面跳转：
-- 顶部：应用名和一句话说明。
-- 汇总条：月度等效合计、年度等效合计、启用中数量、30 天内到期数量。存在多种币种时合计按币种分组。
-- 添加 / 编辑表单：列表上方或旁边，编辑复用同一表单。
-- 订阅列表：每个订阅一行，按距离续费天数排序。
-- 底部动作：加载示例数据、清除示例数据（仅在示例数据存在时显示）。
+## Interface and layout
+A single page, no page navigation:
+- Header: app name and a one-line explanation.
+- Summary strip: monthly-equivalent total, yearly-equivalent total, active count, count due within 30 days. With multiple currencies, totals are grouped by currency.
+- Add / edit form: above or beside the list; editing reuses the same form.
+- Subscription list: one row per subscription, sorted by days until renewal.
+- Footer actions: load sample data, clear sample data (only shown when sample data exists).
 
-## 外观与感觉
-冷静紧凑，像财务看板。续费紧急程度只用颜色和文字表示，不靠装饰：逾期红色、7 天内到期琥珀色，其他中性。合计字号比列表行大而粗。界面文案用中文。没有完整的设计系统——续费日期和合计必须是页面上最显眼的东西。
+## Look and feel
+Calm and dense, like a finance dashboard. Renewal urgency is shown only with color and text, not decoration: overdue red, due within 7 days amber, other items neutral. Totals are larger and bolder than list rows. Interface copy is in English. There is no full design system — renewal dates and totals must be the most prominent things on the page.
 
-## 功能与行为
+## Features and behavior
 
-### 添加订阅
-- 字段：名称（必填）、金额（必填，大于 0 的数字）、币种（文本标签，表单默认 CNY，可改）、计费周期（按月或按年）、下次续费日期（必填，日期选择）、分类（预设：视频、音乐、工具、云服务、其他；选“其他”可自由填写）、备注（可选）。
-- 保存后订阅按续费顺序出现在列表里，合计立刻更新。
-- 校验：缺名称、金额不大于 0、缺续费日期时阻止保存，并指出哪个字段有问题，不静默失败。
+### Add subscription
+- Fields: name (required), amount (required, a number greater than 0), currency (text label, form default CNY, editable), billing cycle (monthly or yearly), next renewal date (required, date picker), category (presets: Streaming, Music, Tools, Cloud, Other), notes (optional).
+- After saving, the subscription appears in the list in renewal order and totals update immediately.
+- Validation: missing name, amount not greater than 0, or missing renewal date blocks saving and names which field is wrong; it never fails silently.
 
-### 列表与续费排序
-- 每行显示：名称、分类、金额加币种和周期、下次续费日期、距离续费天数（“逾期 N 天”“N 天后”“今天”）、状态（启用中 / 已暂停）。
-- 排序：先逾期（逾期最久在前），再按到期从近到远；已暂停的排在启用中之后。
-- 高亮：逾期行红色、7 天内到期琥珀色、已暂停行变灰。
+### List and renewal sorting
+- Each row shows: name, category, amount with currency and cycle, next renewal date, days until renewal ("Overdue by N days", "Due in N days", "Due today"), and status (Active / Paused).
+- Sorting: overdue first (most overdue first), then nearest first; paused subscriptions come after active ones.
+- Highlighting: overdue rows red, due within 7 days amber, paused rows muted.
 
-### 汇总合计
-- 月度等效合计：按月订阅按原值计，按年订阅按金额 / 12 计。
-- 年度等效合计：按年订阅按原值计，按月订阅按金额 × 12 计。
-- 合计按币种标签分组显示，不做换算。
-- 已暂停订阅不计入合计，也不计入 30 天内到期数量。
-- 30 天内到期数量：启用中、且下次续费在 0–30 天内的订阅（逾期也算到期）。
+### Summary totals
+- Monthly-equivalent total: monthly subscriptions count at face value, yearly subscriptions count as amount / 12.
+- Yearly-equivalent total: yearly subscriptions count at face value, monthly subscriptions count as amount × 12.
+- Totals are grouped by currency label; no conversion is performed.
+- Paused subscriptions are excluded from totals and from the 30-day due count.
+- Due-within-30-days count: active subscriptions whose next renewal is within 0–30 days (overdue counts as due).
 
-### 编辑、暂停、删除
-- 编辑打开同一表单并预填，保存后行、顺序和合计立刻更新。
-- 暂停把订阅置为已暂停：仍在列表里、变灰、不计入合计；恢复则回到启用中。
-- 删除先在页面内确认一步，不是点一下就不可逆地删掉，确认后删除该行并更新合计。
+### Edit, pause, delete
+- Edit opens the same form pre-filled; after saving, the row, order and totals update immediately.
+- Pause marks a subscription as paused: it stays in the list, goes muted, and is excluded from totals; resume returns it to active.
+- Delete requires an in-page confirm step first, not an irreversible one-click delete; after confirming, the row is removed and totals update.
 
-### 筛选
-- 筛选按钮：全部、启用中、已暂停。筛选不改变底层数据和合计。
+### Filter
+- Filter buttons: All, Active, Paused. Filtering does not change the underlying data or totals.
 
-### 持久化与示例数据
-- 每次改动都把全部订阅保存到浏览器 localStorage，刷新后恢复。
-- “加载示例数据”加入三个示例订阅（一个视频服务、一个音乐服务、一个开发工具），续费日期分别落在逾期、快到期、待到期三种状态。只在列表为空时提供。
-- 示例数据可以清除；清除只删示例条目。
+### Persistence and sample data
+- Every change saves all subscriptions to browser localStorage; refresh restores them.
+- "Load sample data" adds three sample subscriptions (a streaming service, a music service, a developer tool), with renewal dates falling in the overdue, due-soon and upcoming states respectively. It is only offered when the list is empty.
+- Sample data can be cleared; clearing removes only sample entries.
 
-## 状态与边界
-- **第一次使用 / 空状态**：一句简短说明，加“添加订阅”和“加载示例数据”两个动作。没有用户要求时不显示假数据。
-- **正常使用**：列表、汇总和表单都在同一页可见。
-- **错误状态**：表单输入无效时指出哪个字段错了，并保留已输入的值。
-- **持久化**：数据在同一浏览器刷新后还在；不跨设备、不跨账号同步。清除浏览器数据会清除订阅。
-- **假设**：不同币种的金额不换算，合计按币种标签分组。
+## States and boundaries
+- **First use / empty state**: a short explanation, with "Add subscription" and "Load sample data" actions. No fake data is shown without the user asking.
+- **Normal use**: list, summary and form are all visible on the same page.
+- **Error state**: invalid form input names which field is wrong and keeps the values already entered.
+- **Persistence**: data persists across refresh in the same browser; it does not sync across devices or accounts. Clearing browser data clears subscriptions.
+- **Assumption**: amounts in different currencies are not converted; totals are grouped by currency label.
 
-## 产品决策
-- 单页、无账号：为了一个下午能做完概念验证，也让个人订阅数据留在本地。
-- 续费优先排序：因为问题是忘记续费，不是缺一张列表。
-- 只用 localStorage：因为不在范围内的服务器、账号和同步。
-- 示例数据按钮：为了第一次使用和演示能同时看到三种紧急状态，而不用编造用户的真实订阅。
+## Product decisions
+- Single page, no account: so a proof of concept fits in one afternoon, and personal subscription data stays local.
+- Renewal-first sorting: because the problem is forgetting renewals, not lacking a list.
+- localStorage only: because a server, accounts and sync are out of scope.
+- Sample-data button: so first use and the demo can show all three urgency states at once without inventing the user's real subscriptions.
 
-## 本次要做的
-上面功能与行为里的全部内容，在一个页面上，带 localStorage 持久化，用于演示视频和公开仓库。
+## In scope this time
+Everything in Features and behavior above, on one page, with localStorage persistence, for the demo video and the public repository.
 
-## 本次不做的
-- 真实提醒（邮件 / 推送）：需要服务器和通知权限；应用内“快到期”高亮是替代。
-- 云同步和账号：需要后端和鉴权。
-- 银行 / 邮箱导入：需要外部集成和凭证。
-- 货币换算：需要汇率来源。
+## Out of scope this time
+- Real reminders (email / push): need a server and notification permissions; in-page "due soon" highlighting is the substitute.
+- Cloud sync and accounts: need a backend and authentication.
+- Bank / email import: need external integrations and credentials.
+- Currency conversion: need an exchange-rate source.
 
-## 以后可能做的
-- “标记已续费”动作：把续费日期按周期往后推一期。
-- 月度花费随时间变化的图表。
-- 导出 CSV。
+## Possible later
+- A "mark as renewed" action: push the renewal date forward by one cycle.
+- A chart of monthly spend over time.
+- CSV export.
 
-## 非目标
-- 应用不会扣费、支付或取消任何真实订阅。
-- 应用不会把数据存到或传到任何服务器。
-- 应用不会声称在页面外发送提醒。
+## Non-goals
+- The app never charges, pays for, or cancels any real subscription.
+- The app never stores or sends data to any server.
+- The app never claims to send reminders outside the page.
 
-## 待确认问题
-- 项目名“SubTrack”和中文界面：用户已确认用中文；提交说明以中文为主，Devpost 表单本身为英文界面，提交时如需英文翻译再附。
+## Open questions
+- Project name "SubTrack" and English interface: confirmed by the user on 2026-10-26; submission text is in English, as required by the Devpost rules.

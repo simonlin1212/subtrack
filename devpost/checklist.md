@@ -3,21 +3,19 @@ doc: checklist
 status: approved
 ---
 
-# SubTrack — 构建检查清单
+# SubTrack — Build Checklist
 
-## 已完成
-- [x] scope.md、prd.md、spec.md 均为 approved（中文版）
-- [x] index.html：顶部、汇总条、表单、列表、底部动作
-- [x] styles.css：布局、逾期红色、快到期琥珀色、已暂停变灰
-- [x] app.js：表单校验、localStorage 存储、续费排序、按币种合计、筛选、编辑 / 暂停 / 删除、示例数据
-- [x] README.md：是什么、给谁用、怎么运行、学到了什么
-- [x] 本地服务检查：python3 http.server 能提供页面，node --check app.js 通过
-- [x] 演示模式 `?demo=1`：真实应用内自动演示添加、暂停、筛选
+## Done
+- [x] scope.md, prd.md, spec.md are all approved (English version)
+- [x] index.html: header, summary strip, form, list, footer actions
+- [x] styles.css: layout, overdue red, due-soon amber, paused muted
+- [x] app.js: form validation, localStorage store, renewal sorting, totals by currency, filter, edit / pause / delete, sample data
+- [x] README.md: what it is, who it is for, how to run it, what was learned
+- [x] Local serving check: python3 http.server serves the page, node --check app.js passes
+- [x] Demo mode `?demo=1`: real in-app automatic demo of add, pause and filter
+- [x] 75-second real demo video, frames verified for totals and sorting
+- [x] Public GitHub repository https://github.com/simonlin1212/subtrack created and push-tested, containing scope.md, prd.md, spec.md, README.md and a license
 
-## 已完成（续）
-- [x] 虚拟显示 + Chromium + ffmpeg 录 75 秒真实演示视频，抽帧验证合计与排序
-- [x] GitHub 公开仓库 https://github.com/simonlin1212/subtrack 已创建并实测推送，仓库包含 scope.md、prd.md、spec.md、README.md 与许可证
-
-## 待验证
-- [ ] 演示视频上传到 YouTube，拿到公开链接
-- [ ] Devpost 提交（须学习者本人确认最终视频与仓库后才提交）
+## Still to verify
+- [ ] Demo video uploaded to YouTube, public link obtained (English version to be recorded first)
+- [ ] Devpost submission (only after the learner confirms the final video and repository)

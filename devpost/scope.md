@@ -5,45 +5,45 @@ status: approved
 
 # SubTrack
 
-一句话：一个单页订阅管理助手，告诉你每个月花了多少、下一个什么时候续费、接下来哪些要到期。
+One line: a single-page subscription management assistant that shows what you pay, when it renews, and what is due next.
 
-## 独特核心
-核心不是“一张订阅列表”，而是“按续费排序的视图”：所有订阅按距离下次续费的天数排序，逾期和快到期的高亮显示，月度合计一直放在最上面。如果去掉续费排序和合计，它就只是一张普通列表了。
+## Unique core
+The core is not "a list of subscriptions" but "a renewal-first view": all subscriptions sorted by days until next renewal, overdue and soon-due items highlighted, and the monthly total always visible at the top. Without renewal sorting and totals, it would just be an ordinary list.
 
-## 面向谁
-订阅很多的人——视频、音乐、工具、云服务——经常忘记续费日期，只有扣费时才想起来。现在他们要一个个服务去查，或者根本不查，也没有一个统一的月度合计。
+## Who it is for
+People with many subscriptions — video, music, tools, cloud services — who often forget renewal dates and only notice when a charge appears. Right now they have to check each service one by one, or they do not check at all, and they have no single monthly total.
 
-## 核心循环
-打开它，看到按续费排序的订阅和顶部的月度合计；添加一个订阅（名称、金额、周期、下次续费日期），它立刻按顺序插进列表，合计也立刻更新。续费前回来看看未来 30 天内到期的有哪些，不想要的就暂停或删除。
+## Core loop
+Open it, see subscriptions in renewal order plus the monthly total at the top; add a subscription (name, amount, cycle, next renewal date), and it immediately slots into order and the total updates. Come back before a renewal, see what is due in the next 30 days, and pause or delete what you no longer want.
 
-## 灵感与风格
-冷静、紧凑、实用，像个人财务看板，不像营销页。没有用户提供的设计参考，风格保持简单，让续费日期和合计成为页面上最显眼的东西。
+## Inspiration and style
+Calm, dense and practical, like a personal finance dashboard, not a marketing page. No design reference was provided by the user, so the style stays simple and lets renewal dates and totals be the most prominent things on the page.
 
-## 对学习者为什么重要
-这是真实的个人需求（订阅太多、续费总忘），也贴合金融背景，同时小到可以在一个下午做完并演示。
+## Why it matters to the learner
+This is a real personal need (too many subscriptions, renewals always forgotten) and fits a finance background, while staying small enough to build and demonstrate in one afternoon.
 
-## “能跑起来”长什么样
-打开应用，添加一个订阅，看到它按续费顺序出现，月度合计跟着变。加载示例数据后，逾期、快到期、待到期三种状态都能看到，合计按币种分组。最能说明问题的瞬间就是：加一个订阅，顺序、高亮和合计同时变化。
+## What "working" looks like
+Open the app, add a subscription, and see it appear in renewal order with the monthly total changing. After loading sample data, the overdue, due-soon and upcoming states are all visible, with totals grouped by currency. The clearest proof is: add a subscription, and order, highlighting and totals change at once.
 
-## 概念验证边界
-包含：
-- 添加、编辑、删除、暂停/恢复订阅
-- 按距离续费天数排序，逾期 / 7 天内到期 / 待到期高亮
-- 月度等效合计和年度等效合计，按币种分组
-- 未来 30 天内到期数量
-- 按全部 / 启用中 / 已暂停筛选
-- 数据存在浏览器（localStorage），刷新后还在
-- 示例数据按钮，方便第一次使用和演示
+## Proof-of-concept boundary
+Included:
+- Add, edit, delete, pause / resume subscriptions
+- List sorted by days until renewal, with overdue / due within 7 days / upcoming highlighting
+- Monthly-equivalent and yearly-equivalent totals, grouped by currency
+- Count of renewals due in the next 30 days
+- Filter all / active / paused
+- Data stored in the browser (localStorage), persisting after refresh
+- Sample-data button, for first use and for the demo
 
-## 以后再做
-- 真实提醒（邮件 / 推送通知）
-- 云同步和账号
-- 银行或邮箱导入订阅
-- 货币换算
-- 分享或家庭视图
+## Later
+- Real reminders (email / push notifications)
+- Cloud sync and accounts
+- Bank or email import of subscriptions
+- Currency conversion
+- Sharing or family view
 
-## 明确砍掉的
-- 账号和登录：个人概念验证没必要要账号，还会占掉一下午时间。
-- 真实支付：应用只记录你在别处付的钱，本身不扣费。
-- 推送/邮件提醒：本地概念验证做不到；本版本用“快到期”高亮代替提醒。
-- 货币换算：合计按币种标签分组，不换算，因为没有选汇率来源，换算会是编出来的精度。
+## Explicitly cut
+- Accounts and login: unnecessary for a personal proof of concept, and would eat the afternoon.
+- Real payments: the app only records money paid elsewhere; it never charges anything itself.
+- Push / email reminders: a local proof of concept cannot do them; this version uses "due soon" highlighting instead of reminders.
+- Currency conversion: totals are grouped by currency label, not converted, because no exchange-rate source was chosen and conversion would be invented precision.

@@ -1,37 +1,37 @@
-# SubTrack — 订阅管理助手
+# SubTrack — Subscription Management Assistant
 
-一个单页订阅管理助手：告诉你每个月花了多少、下一个什么时候续费、接下来哪些要到期。
+A single-page subscription management assistant: see how much you pay each month, what renews next, and what is due soon.
 
-## 给谁用
-订阅很多的人——视频、音乐、工具、云服务——经常忘记续费日期，只有扣费时才想起来。
+## Who it is for
+People with many subscriptions — streaming, music, tools, cloud services — who often forget renewal dates and only notice when a charge appears.
 
-## 能做什么
-- 添加、编辑、删除、暂停 / 恢复订阅
-- 按距离续费天数排序：逾期在最前，7 天内到期高亮，逾期红色、快到期琥珀色
-- 月度等效合计和年度等效合计，按币种分组（不做货币换算）
-- 未来 30 天内到期数量，全部 / 启用中 / 已暂停筛选
-- 数据存在浏览器 localStorage，刷新后还在；示例数据一键加载、一键清除
+## What it can do
+- Add, edit, delete, pause / resume subscriptions
+- Sort by days until renewal: overdue first, due within 7 days highlighted, overdue red, due-soon amber
+- Monthly-equivalent and yearly-equivalent totals, grouped by currency (no currency conversion)
+- Count of renewals due within 30 days, All / Active / Paused filter
+- Data stored in browser localStorage, persisting after refresh; sample data loads and clears with one click
 
-## 怎么运行
-在项目文件夹里运行：
+## How to run
+In the project folder, run:
 
 ```
 python3 -m http.server 8000
 ```
 
-然后在浏览器打开 http://localhost:8000/
+Then open http://localhost:8000/ in the browser.
 
-不需要账号，不需要 API 密钥，没有服务器。数据只存在本浏览器里，不会传到任何服务器。
-SubTrack 不会扣费、支付或取消任何真实订阅。
+No account, no API key, no server. Data is stored only in this browser and is never sent to any server.
+SubTrack never charges, pays for, or cancels any real subscription.
 
-## 演示视频
-演示录的是真实跑起来的应用（虚拟显示里的 Chromium + ffmpeg 录屏），不是 AI 生成的假演示：
-打开 `?demo=1` 会自动演示：空状态 → 加载示例数据 → 添加一个云盘会员 → 暂停一个音乐会员 → 筛选已暂停 → 回到全部。
+## Demo video
+The demo records the real running app (Chromium on a virtual display + ffmpeg screen recording), not an AI-generated fake demo:
+open `?demo=1` and it automatically demonstrates: empty state → load sample data → add a cloud storage subscription → pause a music subscription → filter paused → back to all.
 
-## 学到了什么
-- 从空文件夹开始、用技能包一步步做 scope → prd → spec → 代码，是一个下午能做完的节奏。
-- 最难的不是写代码，是把范围砍到刚好：续费排序和合计就是核心，提醒、同步、换算都可以以后再做。
-- 演示要录真实应用：评审不会克隆运行代码，视频必须自己讲清楚它真的能跑。
+## What was learned
+- Starting from an empty folder and working step by step through scope → PRD → spec → code with the skill pack is a rhythm that fits in one afternoon.
+- The hardest part was not writing code, but cutting scope to exactly what matters: renewal sorting and totals are the core; reminders, sync and conversion can come later.
+- The demo must record the real app: reviewers will not clone and run the code, so the video itself has to show that it really works.
 
-## 规划文档
-`devpost/scope.md`、`devpost/prd.md`、`devpost/spec.md`（均为 approved 状态）。个人背景文件 `devpost/learner-profile.md` 已加入 `.gitignore`，不会公开。
+## Planning documents
+`devpost/scope.md`, `devpost/prd.md`, `devpost/spec.md` (all approved). The personal background file `devpost/learner-profile.md` is in `.gitignore` and is not public.

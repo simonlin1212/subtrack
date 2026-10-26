@@ -3,109 +3,109 @@ doc: spec
 status: approved
 ---
 
-# SubTrack — 技术方案
+# SubTrack — Technical Specification
 
-## 用通俗的话讲它怎么工作
-SubTrack 就是一个网页，没有服务器、没有账号。这个页面自己做三件事：显示表单和列表、把订阅存在浏览器自己的存储里、每次改动都重新算顺序和合计。添加一个订阅时，页面把它存下来，按下次续费日期排好序，更新合计——全在浏览器里、同一页上完成。刷新页面时再从浏览器存储里把列表读回来，所以数据不会丢。
+## How it works, in plain language
+SubTrack is just a web page, with no server and no account. The page itself does three things: show the form and list, store subscriptions in the browser's own storage, and recompute order and totals on every change. When a subscription is added, the page saves it, sorts it by next renewal date, and updates totals — all in the browser, on the same page. On refresh, the page reads the list back from browser storage, so data is not lost.
 
-## 核心旅程在系统里的走向
-PRD 参考：`prd.md > 核心旅程`。
-“用户打开 index.html（本地服务）→ 页面从 localStorage 读订阅 → 按续费排序渲染汇总和列表 → 用户填表单点保存 → 页面校验字段、把订阅存入存储、重新排序、重新渲染汇总和列表 → 用户编辑、暂停或删除 → 同样是保存、排序、重新渲染 → 用户刷新 → 存储被重新读出，同一列表再次出现。”
+## Core journey through the system
+PRD reference: `prd.md > Core journey`.
+"User opens index.html (served locally) → page reads subscriptions from localStorage → renders summary and list in renewal order → user fills the form and clicks save → page validates fields, stores the subscription, re-sorts, re-renders summary and list → user edits, pauses or deletes → same save, sort, re-render → user refreshes → storage is read again and the same list reappears."
 
-## 技术栈
-- 纯 HTML、CSS、JavaScript，不用框架、不用编译步骤。理由：一个页面、一个下午，不用装东西、不用编译，演示录屏录的就是真实页面。
-- 浏览器 localStorage 做持久化。文档：MDN Web Docs，localStorage。理由：不在范围内的服务器；存储在同一浏览器刷新后还在。
-- 只用本地静态服务来提供页面（例如 `python3 -m http.server` 或 `npx serve`）。理由：用 http 提供可以避免 file 协议的怪问题；应用本身没有后端。
-- 没有外部服务、没有 API 密钥、没有需要安装的依赖。
+## Tech stack
+- Plain HTML, CSS and JavaScript, no framework, no build step. Reason: one page, one afternoon, nothing to install, nothing to compile, and the demo recording records the real page.
+- Browser localStorage for persistence. Documentation: MDN Web Docs, localStorage. Reason: a server is out of scope; storage persists across refresh in the same browser.
+- Only a local static server to serve the page (for example `python3 -m http.server` or `npx serve`). Reason: serving over http avoids file-protocol quirks; the app itself has no backend.
+- No external services, no API keys, no dependencies to install.
 
-## 在哪里运行、怎么试用
-运行环境：任何现代浏览器，本地提供。要求：支持 localStorage 的浏览器；不需要账号、不需要 API 密钥。
-启动命令（在项目文件夹里）：
+## Where it runs, how to try it
+Runtime: any modern browser, served locally. Requirements: a browser supporting localStorage; no account, no API key.
+Start command (in the project folder):
 ```
 python3 -m http.server 8000
 ```
-然后在浏览器打开 http://localhost:8000/。演示录屏时，同一页面在虚拟显示里的 Chromium 中打开，用 ffmpeg 录制。
-提交需要一段短演示视频和一个公开 GitHub 仓库。部署是可选的，本概念验证不选部署；视频才是交付物，不是线上链接。
+Then open http://localhost:8000/ in the browser. For the demo recording, the same page is opened in Chromium on a virtual display and recorded with ffmpeg.
+Submission needs a short demo video and a public GitHub repository. Deployment is optional and is not chosen for this proof of concept; the video is the deliverable, not a live link.
 
-## 外观与感觉
-配色：浅色中性背景、深色文字、白色卡片；紧急程度只用颜色表示——逾期红色、7 天内到期琥珀色、已暂停灰色。字体：系统无衬线字体，合计字号大而粗，列表行常规字号。密度：列表行紧凑，一屏能放下多个订阅。界面文案：中文。承接自 `prd.md > 外观与感觉`，不需要再做设计调研。
+## Look and feel
+Colors: light neutral background, dark text, white cards; urgency shown only by color — overdue red, due within 7 days amber, paused grey. Fonts: system sans-serif, totals large and bold, list rows regular size. Density: compact list rows, several subscriptions visible on one screen. Interface copy: English. Taken from `prd.md > Look and feel`; no further design research is needed.
 
-## 组件
+## Components
 
-### 页面骨架（index.html）
-做什么：放顶部、汇总条、表单、列表容器和底部动作。对接：应用脚本。
-PRD 参考：`prd.md > 界面与布局`。
+### Page shell (index.html)
+What it does: holds the header, summary strip, form, list container and footer actions. Connects to: the app script.
+PRD reference: `prd.md > Interface and layout`.
 
-### 订阅表单
-做什么：收集名称、金额、币种、周期、下次续费日期、分类和备注；校验必填字段；保存时发出一个订阅对象；编辑时预填。对接：存储和渲染器。
-PRD 参考：`prd.md > 添加订阅`。
+### Subscription form
+What it does: collects name, amount, currency, cycle, next renewal date, category and notes; validates required fields; emits a subscription object on save; pre-fills on edit. Connects to: store and renderer.
+PRD reference: `prd.md > Add subscription`.
 
-### 订阅列表渲染器
-做什么：给订阅排序（先逾期、再从近到远、已暂停最后），算距离续费天数和紧急程度，每个订阅渲染一行，带编辑 / 暂停 / 恢复 / 删除动作。对接：存储。
-PRD 参考：`prd.md > 列表与续费排序`、`prd.md > 编辑、暂停、删除`。
+### Subscription list renderer
+What it does: sorts subscriptions (overdue first, then nearest first, paused last), computes days until renewal and urgency, renders one row per subscription with edit / pause / resume / delete actions. Connects to: store.
+PRD reference: `prd.md > List and renewal sorting`, `prd.md > Edit, pause, delete`.
 
-### 汇总计算器
-做什么：只用启用中的订阅，算按币种分组的月度等效合计和年度等效合计、启用中数量、30 天内到期数量。对接：存储和页面骨架。
-PRD 参考：`prd.md > 汇总合计`。
+### Summary calculator
+What it does: using only active subscriptions, computes monthly-equivalent and yearly-equivalent totals grouped by currency, active count, and count due within 30 days. Connects to: store and page shell.
+PRD reference: `prd.md > Summary totals`.
 
-### 存储（localStorage）
-做什么：启动时加载订阅数组，每次改动都保存，提供添加 / 更新 / 删除 / 切换暂停操作。对接：表单、渲染器和计算器。
-PRD 参考：`prd.md > 持久化与示例数据`。
+### Store (localStorage)
+What it does: loads the subscription array on startup, saves it on every change, provides add / update / delete / toggle-pause operations. Connects to: form, renderer and calculator.
+PRD reference: `prd.md > Persistence and sample data`.
 
-### 示例数据加载器
-做什么：列表为空时，提供插入三个示例订阅，续费日期分别落在逾期、快到期、待到期三种状态；可以清除示例条目。对接：存储。
-PRD 参考：`prd.md > 持久化与示例数据`。
+### Sample data loader
+What it does: when the list is empty, offers to insert three sample subscriptions, with renewal dates falling in the overdue, due-soon and upcoming states; sample entries can be cleared. Connects to: store.
+PRD reference: `prd.md > Persistence and sample data`.
 
-## 数据模型
-一个数组，存在 localStorage 键 `subtrack.subscriptions.v1` 里，以 JSON 保存。每个订阅：
+## Data model
+One array, stored in localStorage under key `subtrack.subscriptions.v1`, saved as JSON. Each subscription:
 ```
 {
-  "id": "字符串（生成，例如 Date.now + 随机数）",
-  "name": "字符串，必填",
-  "amount": "数字，> 0",
-  "currency": "字符串，例如 CNY",
+  "id": "string (generated, e.g. Date.now + random)",
+  "name": "string, required",
+  "amount": "number, > 0",
+  "currency": "string, e.g. CNY",
   "cycle": "'monthly' | 'yearly'",
   "nextRenewal": "'YYYY-MM-DD'",
-  "category": "字符串",
-  "notes": "字符串，可选",
-  "paused": "布尔值",
-  "isSample": "布尔值"
+  "category": "string",
+  "notes": "string, optional",
+  "paused": "boolean",
+  "isSample": "boolean"
 }
 ```
-存在哪里：只在该来源的浏览器 localStorage 里。怎么更新：每次添加 / 编辑 / 暂停 / 删除都把整个数组写回去。用户离开再回来：页面加载时读出数组并再次渲染。清除该站点的浏览器数据会清除订阅。
+Where it lives: only in that origin's browser localStorage. How it updates: the whole array is written back on every add / edit / pause / delete. When the user leaves and returns: the page loads the array and renders it again. Clearing that site's browser data clears subscriptions.
 
-## 文件结构
+## File structure
 ```
 project/
-├── index.html          # 页面骨架：顶部、汇总、表单、列表、底部
-├── styles.css          # 布局、紧急程度颜色、已暂停变灰
-├── app.js              # 表单、存储、排序、合计、渲染、示例数据
-├── README.md           # 是什么、给谁用、怎么运行、学到了什么
-├── devpost/            # Devpost 学习工作区
-│   ├── learner-profile.md   # 个人背景，已加入 .gitignore，不公开
+├── index.html          # Page shell: header, summary, form, list, footer
+├── styles.css          # Layout, urgency colors, paused muted style
+├── app.js              # Form, store, sorting, totals, rendering, sample data
+├── README.md           # What it is, who it is for, how to run it, what was learned
+├── devpost/            # Devpost learning workspace
+│   ├── learner-profile.md   # Personal background, in .gitignore, not public
 │   ├── scope.md
 │   ├── prd.md
 │   ├── spec.md
 │   └── checklist.md
-└── .gitignore          # 忽略 devpost/learner-profile.md
+└── .gitignore          # Ignores devpost/learner-profile.md
 ```
 
-## 外部服务与依赖
-无。没有 API、没有数据库、没有托管、没有密钥、没有限流、没有费用。
+## External services and dependencies
+None. No APIs, no database, no hosting, no keys, no rate limits, no cost.
 
-## 容易出问题的地方
-- **浏览器存储不可用或被清除** → 应用再次显示空状态；用户看到空提示和示例数据选项，不会崩溃。因为没有服务器，所以没有办法从服务器恢复。
-- **表单输入无效** → 阻止保存并指出哪个字段错了，保留已输入的值。
-- **过去的日期** → 按逾期处理，不拒绝，因为逾期订阅是应用必须展示的真实状态。
+## Realistic failure modes
+- **Browser storage unavailable or cleared** → the app shows the empty state again; the user sees the empty prompt and sample-data option, it does not crash. Because there is no server, there is no way to recover from a server.
+- **Invalid form input** → saving is blocked and names which field is wrong, keeping the values already entered.
+- **A past date** → treated as overdue, not rejected, because overdue subscriptions are a real state the app must show.
 
-## 做了哪些简化、为什么
-- **localStorage 代替服务器数据库**：服务器需要账号和托管；概念验证只需要数据刷新后还在。
-- **合计按币种分组、不换算**：换算需要没选过的汇率来源。
-- **页面内紧急高亮代替真实提醒**：真实提醒需要服务器和通知权限；高亮在演示里展示同样的“快到期”信息。
-- **纯 JavaScript 代替框架**：框架会给单页概念验证增加安装和编译步骤。
+## Simplifications, and why
+- **localStorage instead of a server database**: a server needs accounts and hosting; the proof of concept only needs data to persist across refresh.
+- **Totals grouped by currency, not converted**: conversion needs an exchange-rate source that was never chosen.
+- **In-page urgency highlighting instead of real reminders**: real reminders need a server and notification permissions; highlighting shows the same "due soon" information in the demo.
+- **Plain JavaScript instead of a framework**: a framework would add install and build steps to a single-page proof of concept.
 
-## 决策与待确认问题
-- 技术栈（纯 HTML/CSS/JS，不编译）：为一个下午的概念验证选的；代价是没有组件系统，在这个规模下没问题。这是实现建议，不是学习者的产品选择。
-- 只本地提供、不部署：因为视频才是提交交付物，不是线上链接。
-- 一个真实的不确定点：合计要不要换算币种。已澄清：不换算，按币种标签分组，见 PRD。
-- 待确认：项目名“SubTrack”、中文界面——用户已确认用中文；提交说明以中文为主。
+## Decisions and open issues
+- Tech stack (plain HTML/CSS/JS, no build): chosen for a one-afternoon proof of concept; the cost is no component system, which is fine at this scale. This is an implementation recommendation, not a learner product choice.
+- Served locally only, not deployed: because the video is the submission deliverable, not a live link.
+- One real uncertainty: whether totals should convert currencies. Resolved: do not convert, group by currency label, see PRD.
+- Open items: project name "SubTrack", English interface — confirmed by the user on 2026-10-26; submission text is in English.
